@@ -1,0 +1,27 @@
+extends ../template
+
+block variables
+    - var title = 'Добро пожаловать'
+    
+block content
+    .main-theme
+        .content
+            button.auth-button.cursor Авторизоваться
+            .main-form
+                img.main-avatar(src='./assets/images/main-avatar.png')
+                .name Владимир Астахов
+                .title Личный сайт веб разработчика
+                .social
+                    a(href='https://vk.com' target='_blank')
+                        i.fa.fa-vk.cursor(aria-hidden='true')
+                    a(href='https://github.com/' target='_blank')
+                        i.fa.fa-github-alt.cursor(aria-hidden='true')
+                    a(href='https://www.yandex.ru/' target='_blank')
+                        i.fa.fa-linkedin.cursor(aria-hidden='true')
+            .bottom-menu
+                .button.cursor Мои работы
+                .button.cursor Обо мне
+                .button.cursor Блог
+        .footer
+            .copyright &copy Владимир Астахов | создано с любовью в Loftschool | 2016        
+                
