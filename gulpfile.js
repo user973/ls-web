@@ -34,7 +34,7 @@ const paths = {
     }
 };
 
-//pug
+//сборщик pug
 function templates() {
     return gulp.src(paths.templates.pages)
         .pipe(gulpPlugins.plumber({
@@ -49,7 +49,7 @@ function templates() {
         .pipe(gulp.dest(paths.root));
 }
 
-//scss
+//сборщик scss
 function styles() {
     return gulp.src('./src/styles/app.scss')
         .pipe(gulpPlugins.plumber({
@@ -61,13 +61,17 @@ function styles() {
             })
         }))
         .pipe(gulpPlugins.sourcemaps.init())
+        .pipe(gulpPlugins.autoprefixer({
+            browsers: ['last 2 versions', '> 1%', 'ie 9'],
+            cascade: false
+        }))
         .pipe(gulpPlugins.sass({ outputStyle: 'compressed' }))
         .pipe(gulpPlugins.sourcemaps.write())
         .pipe(gulpPlugins.rename({ suffix: '.min' }))
         .pipe(gulp.dest(paths.styles.dest))
 }
 
-//TODO images - заглушка
+//сборщик images
 function images() {
     return gulp.src(paths.images.src)
         .pipe(gulpPlugins.plumber({
@@ -81,7 +85,7 @@ function images() {
         .pipe(gulp.dest(paths.images.dest));
 }
 
-//TODO fonts - заглушка
+//сборщик fonts
 function fonts() {
     return gulp.src(paths.fonts.src)
         .pipe(gulpPlugins.plumber({
@@ -95,9 +99,11 @@ function fonts() {
         .pipe(gulp.dest(paths.fonts.dest));
 }
 
-//scripts
+//сборщик scripts
 function scripts() {
-    /*return gulp.src(paths.scripts.src)
+    
+    //вариант без webpack
+    return gulp.src(paths.scripts.src)
         .pipe(gulpPlugins.plumber({
             errorHandler: gulpPlugins.notify.onError(function(error) {
                 return {
@@ -109,11 +115,21 @@ function scripts() {
         .pipe(gulpPlugins.concat('bundle.js'))
         .pipe(gulpPlugins.uglify())
         .pipe(gulpPlugins.rename({ suffix: '.min' }))
-        .pipe(gulp.dest(paths.scripts.dest));*/
-    
-    return gulp.src('src/scripts/app.js')
-        .pipe(gulpWebpack(webpackConfig, webpack))
         .pipe(gulp.dest(paths.scripts.dest));
+    
+    //вариант с webpack - подключаем webpack с файлом конфигурации
+    /*return gulp.src('src/scripts/app.js')
+        .pipe(gulpWebpack(webpackConfig, webpack))
+        .pipe(gulp.dest(paths.scripts.dest));*/
+}
+
+//linting js - проверка качества кода js
+//TODO простой вариант - можно улучшить (отключил)
+function linting() {
+    return gulp.src(paths.scripts.src)
+        .pipe(gulpPlugins.eslint())
+        .pipe(gulpPlugins.eslint.format())
+        .pipe(gulpPlugins.eslint.failAfterError())
 }
 
 //ревизии подключаемых файлов(борьба с кэшированием)
@@ -123,7 +139,7 @@ function revision() {
         .pipe(gulp.dest('./build/'));
 }
 
-//очистка
+//очистка папки build
 function clean() {
     return del(paths.root);
 }
@@ -150,6 +166,8 @@ exports.styles = styles;
 exports.images = images;
 exports.fonts = fonts;
 exports.scripts = scripts;
+exports.revision = revision;
+exports.linting = linting;
 exports.clean = clean;
 
 gulp.task('default', gulp.series(

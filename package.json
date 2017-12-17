@@ -4,12 +4,11 @@
   "description": "",
   "main": "gulpfile.js",
   "dependencies": {
-    "font-awesome": "^4.7.0",
     "gulp": "^4.0.0-alpha.2",
     "touch": "^3.1.0"
   },
   "devDependencies": {
-    "font-awesome": "^4.7.0",
+    "gulp-autoprefixer": "^4.0.0",
     "gulp-concat": "^2.6.1",
     "gulp-load-plugins": "^1.5.0",
     "gulp-notify": "^3.0.0",
